@@ -1,11 +1,12 @@
 import { useCallback, useState } from "react"
 import { useDispatch } from "react-redux"
-import { hideAddItemModalAction } from "../../Store/App/actions"
+import { useNavigate } from "react-router-dom";
 import { addItemAction } from '../../Store/Items/actions'
 
 export const AddItemModal = () => {
   const dispatch = useDispatch();
-  
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -14,7 +15,8 @@ export const AddItemModal = () => {
       title,
       description,
     }))
-  }, [dispatch, title, description])
+    navigate("/");
+  }, [dispatch, title, description, navigate])
 
   const onTitleChanged = useCallback((event) => {
     setTitle(event.target.value);
@@ -25,8 +27,8 @@ export const AddItemModal = () => {
   }, [])
 
   const onHideModal = useCallback(() => {
-    dispatch(hideAddItemModalAction())
-  }, [dispatch])
+    navigate("/");
+  }, [navigate])
 
   return (
     <div>

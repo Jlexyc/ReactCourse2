@@ -1,18 +1,40 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { selectIsAddItemModalVisible } from './Store/App/selectors'
+import { Routes, Route, Link } from "react-router-dom";
 import { ItemsList } from './Components/ItemsList/ItemsList';
-import { ItemsListButtons } from './Components/ItemsListButtons/ItemsListButtons';
 import { AddItemModal } from './Components/AddItemModal/AddItemModal';
+import { About } from './Components/About/About';
+import { CategoriesList } from './Components/Categories/CategoriesList';
+
 import './App.css'
 
+const styles = {
+  nav: {
+    borderBottom: "solid 1px",
+    paddingBottom: "1rem"
+  },
+  linkItem: {
+    padding: "0 20px 0 20px",
+  }
+}
+
 export const App = () => {
-  const isAddItemModalVisible = useSelector(selectIsAddItemModalVisible);
   return (
     <div>
-      <ItemsListButtons />
-      <ItemsList />
-      {isAddItemModalVisible ? <AddItemModal /> : null}
+       <nav
+        style={styles.nav}
+      >
+        <Link style={styles.linkItem} to="/">List</Link>
+        <Link style={styles.linkItem} to="/addItem">Add Item</Link>
+        <Link style={styles.linkItem} to="/categories">Categories</Link>
+        <Link style={styles.linkItem} to="/about">About</Link>
+      </nav>
+      <Routes>
+        <Route path="/*" element={<ItemsList />} />
+        <Route path="/categories" element={<CategoriesList />} />
+        <Route path="/items/:categoryId" element={<ItemsList />} />
+        <Route path="/addItem" element={<AddItemModal />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
     </div>
   )
 }

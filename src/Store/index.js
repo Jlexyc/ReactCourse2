@@ -1,11 +1,11 @@
 import { createStore, combineReducers } from 'redux';
 import { itemsReducer } from './Items/reducer';
 import { appReducer } from './App/reducer';
-
-export const selectItems = (state) => state.items.items;
+import { categoriesReducer } from './Category/reducer';
 
 export const store = createStore(combineReducers({
   items: itemsReducer,
+  categories: categoriesReducer,
   app: appReducer,
 }))
 
