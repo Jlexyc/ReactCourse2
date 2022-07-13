@@ -69,12 +69,16 @@ const initialState = {
       description: 'Sell house',
       categoryId: 0,
     },
+    {
+      id: uuidv4(),
+      title: 'Hello',
+      description: 'Sell house',
+      categoryId: 0,
+    },
   ]
 }
 
 export const itemsReducer = (state = initialState, action) => {
-  console.log('action: ', action);
-  console.log('state: ', state);
   switch (action.type) {
     case ADD_ITEM_ACTION:
       return { items: [...state.items, action.item] };

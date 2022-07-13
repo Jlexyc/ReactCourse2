@@ -1,3 +1,4 @@
+import React from 'react';
 import { useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
@@ -12,6 +13,7 @@ export const ItemsList = () => {
   const navigate = useNavigate();
   const { categoryId } = useParams();
 
+  console.log('categoryId: ', categoryId)
   const itemsToDisplay = useMemo(() => {
     let returnItems = [];
     if (categoryId) {

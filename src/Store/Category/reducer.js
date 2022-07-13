@@ -23,8 +23,6 @@ const initialState = {
 }
 
 export const categoriesReducer = (state = initialState, action) => {
-  console.log('action: ', action);
-  console.log('state: ', state);
   switch (action.type) {
     case ADD_CATEGORY_ACTION:
       return state;
