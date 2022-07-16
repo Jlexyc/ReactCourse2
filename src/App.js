@@ -1,25 +1,24 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { isRegistered } from './Store/App/selectors'
-import { AppRouter } from './Components/AppRouter';
-import { RegistrationRouter } from './Components/Registration';
-import './App.css'
+import { BrowserRouter, Link } from 'react-router-dom'
+import { Provider } from 'react-redux'
 
-export const App = () => {
-  const isAppRegistered = useSelector(isRegistered);
-  return isAppRegistered ? <AppRouter /> : <RegistrationRouter />
+import './App.css';
+import { HomeRouter } from './containers/HomeRouter';
+import { store } from './rdx';
+
+function App() {
+  return (
+    <div className="App">
+      <Provider store={store}>
+        <BrowserRouter>
+          <div className='Header'>
+            <Link to={'/'} className={'LinkItem'}>List</Link>
+            <Link to={'add'} className={'LinkItem'}>Add New</Link>
+          </div>
+          <HomeRouter />
+        </BrowserRouter>
+      </Provider>
+    </div>
+  );
 }
 
-// ToDo Item:
-// {
-//   id: string,
-//   title: string,
-//   description: string,
-//   categoryId: string,
-// }
-
-// categoryModel:
-// {
-//   id: string,
-//   name: string,
-// }
+export default App;
