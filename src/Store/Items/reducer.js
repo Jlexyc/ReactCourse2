@@ -1,87 +1,66 @@
-import { v4 as uuidv4 } from 'uuid';
-import { ADD_ITEM_ACTION, DELETE_ITEM_ACTION } from './actions';
+import { 
+  DELETE_ITEM_ACTION_REQUEST,
+  DELETE_ITEM_ACTION_SUCCESS,
+  DELETE_ITEM_ACTION_FAILURE, 
+  FETCH_ITEMS_ACTION_SUCCESS,
+  FETCH_ITEMS_ACTION_REQUEST,
+  FETCH_ITEMS_ACTION_FAILURE,
+  ADD_ITEM_ACTION_REQUEST,
+  ADD_ITEM_ACTION_SUCCESS,
+  ADD_ITEM_ACTION_FAIURE,
+} from './actions';
 
 const initialState = {
-  items: [
-    {
-      id: uuidv4(),
-      title: 'Buy',
-      description: 'Buy drinks',
-      categoryId: 0,
-    },
-    {
-      id: uuidv4(),
-      title: 'Buy',
-      description: 'Buy potatoes',
-      categoryId: 3,
-    },
-    {
-      id: uuidv4(),
-      title: 'Buy',
-      description: 'Buy oranges',
-      categoryId: 2,
-    },
-    {
-      id: uuidv4(),
-      title: 'Buy',
-      description: 'Buy mandarins',
-      categoryId: 1,
-    },
-    {
-      id: uuidv4(),
-      title: 'Buy',
-      description: 'Buy milk',
-      categoryId: 1,
-    },
-    {
-      id: uuidv4(),
-      title: 'Sell',
-      description: 'Sell BTC',
-      categoryId: 2,
-    },
-    {
-      id: uuidv4(),
-      title: 'Sell',
-      description: 'Sell ETH',
-      categoryId: 2,
-    },
-    {
-      id: uuidv4(),
-      title: 'Sell',
-      description: 'Sell laptop',
-      categoryId: 2,
-    },
-    {
-      id: uuidv4(),
-      title: 'Sell',
-      description: 'Sell TV',
-      categoryId: 2,
-    },
-    {
-      id: uuidv4(),
-      title: 'Sell',
-      description: 'Sell appartaments',
-      categoryId: 1,
-    },
-    {
-      id: uuidv4(),
-      title: 'Sell',
-      description: 'Sell house',
-      categoryId: 0,
-    },
-  ]
+  items: [],
+  error: null,
+  isItemsLoading: false,
+  removingItems: {},
+  removingItemsError: {},
+  isAddingItem: false,
+  isAddingItemError: null,
 }
 
 export const itemsReducer = (state = initialState, action) => {
-  console.log('action: ', action);
-  console.log('state: ', state);
   switch (action.type) {
-    case ADD_ITEM_ACTION:
-      return { items: [...state.items, action.item] };
-    case DELETE_ITEM_ACTION:
-      return {
-        items: state.items.filter((item) => item.id !== action.id)
+    case FETCH_ITEMS_ACTION_REQUEST:
+      return { ...state, isItemsLoading: true, error: null }
+    case FETCH_ITEMS_ACTION_SUCCESS:
+      return { ...state, items: action.items, isItemsLoading: false };
+    case FETCH_ITEMS_ACTION_FAILURE:
+      return { ...state, isItemsLoading: false, error: action.error };
+    case DELETE_ITEM_ACTION_REQUEST:
+      return { 
+        ...state, 
+        removingItems: {
+          ...state.removingItems,
+          [action.id]: true,
+        },
+        removingItemsError: {
+          ...state.removingItemsError,
+          [action.id]: null,
+        },
       };
+    case DELETE_ITEM_ACTION_SUCCESS:
+      return { 
+        ...state, 
+        removingItems: {
+          ...state.removingItems,
+          [action.id]: false,
+        },
+        items: state.items.filter((i) => i.id !== action.id),
+      };
+    case ADD_ITEM_ACTION_REQUEST:
+      return {
+        ...state,
+        isAddingItem: true,
+        isAddingItemError: null,
+      }
+    case ADD_ITEM_ACTION_SUCCESS:
+      return {
+        ...state,
+        isAddingItem: false,
+        items: [...state.items, action.item],
+      }
     default:
       return state;
   }

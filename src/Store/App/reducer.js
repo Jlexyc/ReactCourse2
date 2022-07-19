@@ -7,7 +7,6 @@ const initialState = {
   isAddItemModalVisible: false,
 }
 export const appReducer = (state = initialState, action) => {
-  console.log('state app: ', state);
   switch (action.type) {
     case HIDE_ADD_ITEM_MODAL_ACTION:
       return {

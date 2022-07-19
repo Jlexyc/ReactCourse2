@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom";
-import { addItemAction } from '../../Store/Items/actions'
+import { addItem } from '../../Store/Items/thunks'
 
 export const AddItemModal = () => {
   const dispatch = useDispatch();
@@ -11,9 +11,10 @@ export const AddItemModal = () => {
   const [description, setDescription] = useState('');
 
   const onAddItem = useCallback(() => {
-    dispatch(addItemAction({
+    dispatch(addItem({
       title,
       description,
+      weight: '100',
     }))
     navigate("/");
   }, [dispatch, title, description, navigate])
