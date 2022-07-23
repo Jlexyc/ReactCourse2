@@ -13,6 +13,7 @@ export const ItemComponent = ({ item, onDeleteClicked = () => {}, onTitleClicked
       <td className="clickable" onClick={onTitleHandler}>{item.title}</td>
       <td>{item.description}</td>
       <td>{item.id}</td>
+      <td>{item.weight}</td>
       <td>
         {isRemoving ? <CircularProgress /> : <button onClick={onDeleteHandler}>Delete</button>}
       </td>

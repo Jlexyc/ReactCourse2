@@ -14,7 +14,6 @@ const baseUrl = 'http://127.0.0.1:8080';
 
 export const addItem = (item) => {
   return async (dispatch, getState) => {
-    console.log('item: ', item)
     dispatch(addItemRequest(item));
     try {
       const response = await fetch([baseUrl, 'goods'].join('/'), 
