@@ -69,9 +69,9 @@ export const fetchItemsFailure = (error) => {
   }
 }
 
-export const fetchItemsSuccess = (dataArray) => {
+export const fetchItemsSuccess = (data) => {
   return {
     type: FETCH_ITEMS_ACTION_SUCCESS,
-    items: dataArray,
+    data,
   }
 }

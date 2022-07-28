@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 import { ItemsList } from './Components/ItemsList/ItemsList';
-import ItemsListC from './Components/ItemsList/ItemsListC';
-import { AddItemModal } from './Components/AddItemModal/AddItemModal';
-import { About } from './Components/About/About';
-import { CategoriesList } from './Components/Categories/CategoriesList';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers'
+
+import { Switch } from '@mui/material';
 
 import './App.css'
 
@@ -18,40 +18,32 @@ const styles = {
   }
 }
 
+export const ThemeContext = React.createContext('light');
+
 export const App = () => {
+
+  const [currentTheme, setCurrentTheme] = useState('light')
+
+  const themeModeHasChanged = useCallback((event) => {
+    setCurrentTheme(event.target.checked ? 'light' : 'dark')
+  }, [])
+
   return (
-    <div>
-       <nav
-        style={styles.nav}
-      >
-        <Link style={styles.linkItem} to="/">List</Link>
-        <Link style={styles.linkItem} to="/list?sort=title">Sorted List</Link>
-        <Link style={styles.linkItem} to="/addItem">Add Item</Link>
-        <Link style={styles.linkItem} to="/categories">Categories</Link>
-        <Link style={styles.linkItem} to="/about">About</Link>
-      </nav>
-      <Routes>
-        <Route path="/*" element={<ItemsListC />} />
-        <Route path="/list" element={<ItemsList />} />
-        <Route path="/categories" element={<CategoriesList />} />
-        <Route path="/items/:categoryId" element={<ItemsList />} />
-        <Route path="/addItem" element={<AddItemModal />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <ThemeContext.Provider value={currentTheme}>
+        <div id={currentTheme}>
+          <nav
+            style={styles.nav}
+          >
+            <Link style={styles.linkItem} to="/">List</Link>
+            <Switch defaultChecked onChange={themeModeHasChanged}/>
+          </nav>
+          <Routes>
+            <Route path="/*" element={<ItemsList/>} />
+            <Route path="/:filterDate" element={<ItemsList/>} />
+          </Routes>
+        </div>
+      </ThemeContext.Provider>
+    </LocalizationProvider>
   )
 }
-
-// ToDo Item:
-// {
-//   id: string,
-//   title: string,
-//   description: string,
-//   categoryId: string,
-// }
-
-// categoryModel:
-// {
-//   id: string,
-//   name: string,
-// }

@@ -1,4 +1,19 @@
-.clickable {
+#light .clickable {
   cursor: pointer;
   color: blue;
+}
+
+#dark .clickable {
+  cursor: pointer;
+  color: #a4a4e2;
+}
+
+#light .text {
+  cursor: pointer;
+  color: black;
+}
+
+#dark .text {
+  cursor: pointer;
+  color: white;
 }

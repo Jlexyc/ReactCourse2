@@ -11,9 +11,9 @@ export const ItemComponent = ({ item, onDeleteClicked = () => {}, onTitleClicked
   return (
     <tr>
       <td className="clickable" onClick={onTitleHandler}>{item.title}</td>
-      <td>{item.description}</td>
-      <td>{item.id}</td>
-      <td>{item.weight}</td>
+      <td className="text">{item.description}</td>
+      <td className="text">{item.id}</td>
+      <td className="text">{item.weight}</td>
       <td>
         {isRemoving ? <CircularProgress /> : <button onClick={onDeleteHandler}>Delete</button>}
       </td>

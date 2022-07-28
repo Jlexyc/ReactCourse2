@@ -1,47 +1,68 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect, useContext, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ItemComponent } from "../ItemComponent/ItemComponent";
-import { selectIsItemsLoading, selectItemsError, selectRemovingItems, selectTotalWeight } from "../../Store/Items/selectors";
-import { deleteItem, fetchItems } from "../../Store/Items/thunks";
-import { useItemsArray } from './useItemsArray';
+import TextField from '@mui/material/TextField';
+import { selectItemsError, selectTotalReport } from "../../Store/Items/selectors";
+import { fetchItems } from "../../Store/Items/thunks";
+import { ThemeContext } from '../../App';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import dayjs from 'dayjs';
+import './ItemsList.css'
 
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-
-const styles = {
-  progress: {
-    display: 'flex',
-    margin: 20,
+const generalStyles = {
+  light: {
+    container: {
+      backgroundColor: '#FAFAFA',
+    },
+    progress: {
+      display: 'flex',
+      margin: 20,
+    },
+    text: {
+      color: 'black',
+    }
+  },
+  dark: {
+    container: {
+      backgroundColor: '#131313',
+    },
+    progress: {
+      display: 'flex',
+      margin: 20,
+    },
+    text: {
+      color: 'white',
+    }
   }
 };
 
 export const ItemsList = () => {
-  const isItemsLoading = useSelector(selectIsItemsLoading);
   const itemsError = useSelector(selectItemsError);
-  const removingItems = useSelector(selectRemovingItems);
-  const total = useSelector(selectTotalWeight);
   // validate sort param
-
-  const items = useItemsArray();
-
+  const totalReport = useSelector(selectTotalReport);
   const navigate = useNavigate();
+  const { filterDate } = useParams();
+  const dayjsParsedDate = dayjs(filterDate, "DD-MM-YYYY")
+  const selectedDate = dayjsParsedDate.isValid() ? dayjsParsedDate.toDate() : new Date();
+
+  const [date, setDate] = useState(selectedDate);
+  console.log('date: ', date);
+
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchItems());
-  }, [dispatch])
+  const theme = useContext(ThemeContext);
+  const styles = generalStyles[theme];
+  console.log('theme: ', theme);
 
-  const onDeleteElement = useCallback(
-    (id) => dispatch(deleteItem(id)),
-    [dispatch],
-  )
-  const onTitleClicked = useCallback(
-    (title) => {
-      navigate('/items/' + title);
-    },
-    [navigate]
-  )
+  useEffect(() => {
+    dispatch(fetchItems(dayjs(date).format('YYYY-MM-DD')));
+  }, [dispatch, date])
+
+  const handleChange = useCallback((newValue) => {
+    setDate(newValue);
+    navigate('/' + dayjs(newValue).format('DD-MM-YYYY'))
+  }, [navigate]);
 
   if (itemsError) {
     return (
@@ -49,31 +70,43 @@ export const ItemsList = () => {
     )
   }
 
-  if (isItemsLoading) {
-    return (
-      <Box sx={styles.progress}>
-        <CircularProgress />
-      </Box>
-    )
+  if (!totalReport) {
+    return (<div></div>)
   }
 
   return (
-    <table>
-      <tbody>
-        {items.map((item) => <ItemComponent 
-          onDeleteClicked={onDeleteElement} 
-          onTitleClicked={onTitleClicked}
-          key={item.id} 
-          item={item}
-          isRemoving={removingItems[item.id]}
-        />)}
-        <tr>
-          <td />
-          <td />
-          <td>Total:</td>
-          <td>{total}</td>
-        </ tr>
-      </tbody>
-    </table>
+    <div>
+      <div className='calendarContainer'>
+        <DesktopDatePicker
+          label="Date"
+          value={date}
+          onChange={handleChange}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </div>
+      <table style={styles.container}>
+        <tbody>
+          <tr>
+            <td>Date</td>
+            <td>Active Cases</td>
+            <td>Confirmed Cases</td>
+            <td>Death Cases</td>
+            <td>Fatality Rate</td>
+            <td>Recovered</td>
+          </tr>
+          <tr>
+            <td>{totalReport.date}</td>
+            <td>{totalReport.active}</td>
+            <td>{totalReport.confirmed}</td>
+            <td>{totalReport.deaths}</td>
+            <td>{totalReport.fatality_rate}</td>
+            <td>{totalReport.recovered}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   )
 }
+
+
+

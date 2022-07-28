@@ -1,3 +1,9 @@
-.app {
+.app #light {
   padding: 50px;
+  background-color: white;
+}
+
+.app #dark {
+  padding: 50px;
+  background-color: black;
 }

@@ -1,0 +1,9 @@
+td {
+  min-width: 150px;
+  border: 1px solid black;
+}
+
+.calendarContainer {
+  padding: 20px;
+  margin: 20px;
+}
