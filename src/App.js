@@ -1,10 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 import { ItemsList } from './Components/ItemsList/ItemsList';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers'
 
 import { Switch } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import './App.css'
 
@@ -18,11 +20,16 @@ const styles = {
   }
 }
 
-export const ThemeContext = React.createContext('light');
 
 export const App = () => {
 
   const [currentTheme, setCurrentTheme] = useState('light')
+
+  const maintTheme = useMemo(() => createTheme({
+    palette: {
+      mode: currentTheme,
+    },
+  }), [currentTheme]) ;
 
   const themeModeHasChanged = useCallback((event) => {
     setCurrentTheme(event.target.checked ? 'light' : 'dark')
@@ -30,8 +37,8 @@ export const App = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ThemeContext.Provider value={currentTheme}>
-        <div id={currentTheme}>
+      <ThemeProvider theme={maintTheme}>
+        <div className="mainBody" id={currentTheme}>
           <nav
             style={styles.nav}
           >
@@ -43,7 +50,7 @@ export const App = () => {
             <Route path="/:filterDate" element={<ItemsList/>} />
           </Routes>
         </div>
-      </ThemeContext.Provider>
+      </ThemeProvider>
     </LocalizationProvider>
   )
 }

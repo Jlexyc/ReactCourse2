@@ -1,6 +1,6 @@
 const baseUrl = 'https://covid-19-statistics.p.rapidapi.com/';
 const commonHeaders = {
-  'X-RapidAPI-Key': 'XXXX',
+  'X-RapidAPI-Key': '9e886282c3msh1af460eddc4bc36p1facb0jsnd9e2b1a3d5b0',
   'X-RapidAPI-Host': 'covid-19-statistics.p.rapidapi.com'
 }
 

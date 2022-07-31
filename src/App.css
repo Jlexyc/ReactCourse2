@@ -1,9 +1,21 @@
-.app #light {
+#light .app {
   padding: 50px;
   background-color: white;
 }
 
-.app #dark {
+#dark .app {
   padding: 50px;
   background-color: black;
+}
+
+#dark {
+  background-color: black;
+  display: flex;
+  flex: 1;
+}
+
+#light {
+  background-color: white;
+  display: flex;
+  flex: 1;
 }

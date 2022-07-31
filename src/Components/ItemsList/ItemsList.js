@@ -1,17 +1,16 @@
-import { useEffect, useContext, useState, useCallback } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from 'react-router-dom';
-import { ItemComponent } from "../ItemComponent/ItemComponent";
+import { useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { selectItemsError, selectTotalReport } from "../../Store/Items/selectors";
 import { fetchItems } from "../../Store/Items/thunks";
-import { ThemeContext } from '../../App';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import dayjs from 'dayjs';
 import './ItemsList.css'
 
 const generalStyles = {
-  light: {
+  main: {
     container: {
       backgroundColor: '#FAFAFA',
     },
@@ -21,15 +20,13 @@ const generalStyles = {
     },
     text: {
       color: 'black',
+      fontSize: '40px',
+      backgroundColor: 'red',
     }
   },
   dark: {
     container: {
       backgroundColor: '#131313',
-    },
-    progress: {
-      display: 'flex',
-      margin: 20,
     },
     text: {
       color: 'white',
@@ -51,8 +48,17 @@ export const ItemsList = () => {
 
   const dispatch = useDispatch();
 
-  const theme = useContext(ThemeContext);
-  const styles = generalStyles[theme];
+  const theme = useTheme();
+  const textStyles = useMemo(() => { 
+    return { ...generalStyles.main.text, ...(theme.palette.mode === 'dark' ? generalStyles.dark.text : {})}}, 
+    [theme],
+  );
+
+  const contaierStyles = useMemo(() => { 
+    return { ...generalStyles.main.container, ...(theme.palette.mode === 'dark' ? generalStyles.dark.container : {})}}, 
+    [theme],
+  );
+
   console.log('theme: ', theme);
 
   useEffect(() => {
@@ -84,10 +90,10 @@ export const ItemsList = () => {
           renderInput={(params) => <TextField {...params} />}
         />
       </div>
-      <table style={styles.container}>
+      <table style={contaierStyles}>
         <tbody>
           <tr>
-            <td>Date</td>
+            <td style={textStyles}>{getString()}</td>
             <td>Active Cases</td>
             <td>Confirmed Cases</td>
             <td>Death Cases</td>
